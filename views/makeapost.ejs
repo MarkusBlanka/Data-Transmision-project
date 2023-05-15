@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  
+<h1>Help others find their soulmates</h1>
+<form action="/makeapost" method="post" class="container mt-5">
+    <label>Cat/Dog?</label>
+    <select name="typeOfAnimal">
+        <option>Cat</option>
+        <option>Dog</option>
+    </select>
+    <label>Name</label>
+    <input type ="text" name="animalName">
+    <label>Sex</label>
+    <select name="sex">
+        <option>Female</option>
+        <option>Male</option>
+    </select>
+    <label>Breed</label>
+    <input type ="text"  name="breed">
+    <label>Age</label>
+    <input type ="text"  name="age">
+    <label>Behaviour</label>
+    <input type ="text"  name="behaviour">
+    <label>Description</label>
+    <input type ="text"  name="description">
+    <label>Reason for adoption</label>
+    <input type ="text"  name="reason">
+    <button type="submit" class="btn btn-dark">Add Post</button>
+
+</form>
+
+</div>
+
+<%- include('partials/footer') %>
