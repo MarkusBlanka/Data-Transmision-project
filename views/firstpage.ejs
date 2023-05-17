@@ -1,14 +1,23 @@
 <%- include('partials/header') %>
 
-<div class="jumbotron text-center">
-  <h1>Welcome to the Adoption Center!</h1>
+  <div class="jumbotron text-center">
+    <h1>Welcome to the Adoption Center!</h1>
     <p>Please select an option:</p>
     <div class="options">
-      <a  class="btn btn-dark btn-lg" href="/dogs" role="button">Adopt a dog</a>
-      <a  class="btn btn-dark btn-lg" href="/cats" role="button">Adopt a cat</a>
-      <a  class="btn btn-dark btn-lg" href="/makeapost" role="button">Make a post</a>
+      <a class="btn btn-dark btn-lg" href="/dogs" role="button">Adopt a Dog</a>
+      <a class="btn btn-dark btn-lg" href="/cats" role="button">Adopt a Cat</a>
+      <a class="btn btn-dark btn-lg" href="/makeapost" role="button">Make a Post</a>
     </div>
     <a id="logout-btn" class="btn btn-secondary" href="/" role="button">Log Out</a>
-</div>
+  </div>
 
-<%- include('partials/footer') %>
+  <%- include('partials/footer') %>
+
+
+    <style>
+      #logout-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+    </style>

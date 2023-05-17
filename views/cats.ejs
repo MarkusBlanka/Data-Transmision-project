@@ -1,9 +1,76 @@
 <%- include('partials/header') %>
 
-<div class="container mt-5">
-  
-<h1>Choose your future best friend</h1>
+  <div class="container mt-5" id="catss">
+    <div id="title">
+      <h1>Choose your future best friend</h1>
+      <h2>Available Cats</h2>
+    </div>
+    <div class="cat-gallery">
+      <% cats.forEach(function(cat) { %>
 
-</div>
+        <div class="cat-card">
+          <h3>
+            <%= cat.name %>
+          </h3>
+          <p><strong>Breed:</strong>
+            <%= cat.breed %>
+          </p>
+          <a class="btn btn-secondary" role="button" href="/cats/<%= cat._id %>">See details</a>
+        </div>
 
-<%- include('partials/footer') %>
+        <% }); %>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+
+    <style>
+      
+      h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cat-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-gap: 20px;
+      }
+
+      .cat-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        text-align: center;
+      }
+
+
+      .cat-card h3 {
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      .cat-card p {
+        margin-bottom: 10px;
+      }
+
+      .cat-card button {
+        background-color: #555b62;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .cat-card button:hover {
+        background-color: #737b83;
+      }
+    </style>

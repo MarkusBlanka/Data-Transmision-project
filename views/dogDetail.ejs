@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+
+  <div class="container mt-5" id="dog-details">
+    <% if (dog) { %>
+      <h1>
+        <%= dog.name %>
+      </h1>
+      <div class="dog-details">
+        <p><strong>Breed:</strong>
+          <%= dog.breed %>
+        </p>
+        <p><strong>Age:</strong>
+          <%= dog.age %>
+        </p>
+        <p><strong>Behavior:</strong>
+          <%= dog.behaviour %>
+        </p>
+        <p><strong>Description:</strong>
+          <%= dog.description %>
+        </p>
+        <p><strong>Reason for Adoption:</strong>
+          <%= dog.reason %>
+        </p>
+      </div>
+       <form action="/dogs/<%= dog._id %>" method="POST">
+                <button class="btn btn-outline-danger" type="submit">Adopt</button>
+            </form>
+      <% } else { %>
+        <p>Dog not found.</p>
+        <% } %>
+  </div>
+
+  <%- include('partials/footer') %>
+
+
+
+
+    <style>
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .dog-details {
+        margin-top: 30px;
+      }
+
+      .dog-details p {
+        margin-bottom: 10px;
+      }
+    </style>

@@ -1,0 +1,53 @@
+<%- include('partials/header') %>
+
+    <div class="container mt-5" id="cat-details">
+        <% if (cat) { %>
+            <h1>
+                <%= cat.name %>
+            </h1>
+            <div class="cat-details">
+                <p><strong>Breed:</strong>
+                    <%= cat.breed %>
+                </p>
+                <p><strong>Age:</strong>
+                    <%= cat.age %>
+                </p>
+                <p><strong>Behavior:</strong>
+                    <%= cat.behaviour %>
+                </p>
+                <p><strong>Description:</strong>
+                    <%= cat.description %>
+                </p>
+                <p><strong>Reason for Adoption:</strong>
+                    <%= cat.reason %>
+                </p>
+            </div>
+            <form action="/cats/<%= cat._id %>" method="POST">
+                <button class="btn btn-outline-danger" type="submit">Adopt</button>
+            </form>
+            <% } else { %>
+                <p>Cat not found.</p>
+                <% } %>
+    </div>
+
+    <%- include('partials/footer') %>
+
+        <style>
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1 {
+                text-align: center;
+            }
+
+            .cat-details {
+                margin-top: 30px;
+            }
+
+            .cat-details p {
+                margin-bottom: 10px;
+            }
+        </style>

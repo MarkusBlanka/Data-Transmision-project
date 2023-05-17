@@ -1,9 +1,76 @@
 <%- include('partials/header') %>
 
-<div class="container mt-5">
-  
-<h1>Choose your future best friend</h1>
+  <div class="container mt-5" id="dogs">
+    <div id="title">
+      <h1>Choose your future best friend</h1>
+      <h2>Available Dogs</h2>
+    </div>
+    <div class="dog-gallery">
+      <% dogs.forEach(function(dog) { %>
 
-</div>
+        <div class="dog-card">
+          <h3>
+            <%= dog.name %>
+          </h3>
+          <p><strong>Breed:</strong>
+            <%= dog.breed %>
+          </p>
+          <a class="btn btn-secondary" role="button" href="/dogs/<%= dog._id %>">See details</a>
+        </div>
 
-<%- include('partials/footer') %>
+        <% }); %>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+
+    <style>
+      
+      h1 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      h2 {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .dog-gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-gap: 20px;
+      }
+
+      .dog-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        text-align: center;
+      }
+
+
+      .dog-card h3 {
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      .dog-card p {
+        margin-bottom: 10px;
+      }
+
+      .dog-card button {
+        background-color: #555b62;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .dog-card button:hover {
+        background-color: #737b83;
+      }
+    </style>
