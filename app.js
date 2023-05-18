@@ -281,13 +281,20 @@ app.post("/login", function (req, res) {
             if (foundUser) {
                 if (foundUser.password === password) {
                     res.render("firstpage");
+                } else {
+                    // Incorrect password
+                    res.render("advertisement", { message: "Incorrect password. Please try again." });
                 }
+            } else {
+                // User doesn't exist
+                res.render("advertisement", { message: "User not found. Please register an account." });
             }
         })
-        .catch(err => {
+        .catch((err) => {
             console.log(err);
+            // Error occurred
+            res.render("advertisement", { message: "An error occurred. Please try again later." });
         });
-
 });
 
 

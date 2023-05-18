@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+
+<div class="jumbotron text-center">
+  <div class="container">
+    <h1>Advertisement</h1>
+    <p><%= message %></p>
+    <% if (message === "Incorrect password. Please try again.") { %>
+    <a class="btn btn-secondary" role="button" href="/login">Back</a>
+    <% } else if(message === "User not found. Please register an account.") { %>
+      <a class="btn btn-secondary" role="button" href="/register">Back</a>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
