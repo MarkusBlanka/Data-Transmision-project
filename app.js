@@ -3,12 +3,21 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 const encrypt = require("mongoose-encryption");
+const https = require("https");
+const config = require("./config");
 
 const app = express();
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+
+
+
+
+
+
+
 
 mongoose.connect("mongodb://localhost:27017/adoptionDB", { useNewUrlParser: true });
 
@@ -49,9 +58,46 @@ const catSchema = new mongoose.Schema({
 
 const Cat = new mongoose.model("Cat", catSchema);
 
+
+
+
 app.get("/", function (req, res) {
-    res.render("home");
-});
+    const cityName = "Satu Mare"; // Set the city name to Satu Mare
+    const apiKey = config.apiKey;
+    const units = "metric";
+    const url =
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      cityName +
+      "&units=" +
+      units +
+      "&appid=" +
+      apiKey;
+  
+    https.get(url, function (response) {
+      response.on("data", function (data) {
+        const weatherData = JSON.parse(data);
+        const temp = weatherData.main.temp;
+        const weatherDescription = weatherData.weather[0].description;
+        const icon = weatherData.weather[0].icon;
+        const imgURL =
+          "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+        const name = weatherData.name;
+  
+        res.render("home", {
+          cityName: name,
+          temperature: temp,
+          weatherDescription: weatherDescription,
+          iconURL: imgURL,
+        });
+      });
+    });
+  });
+
+
+
+
+
+
 
 app.get("/login", function (req, res) {
     res.render("login");

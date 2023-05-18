@@ -11,4 +11,15 @@
   </div>
 </div>
 
+<div class="container">
+  <div class="row">
+    <div class="col text-center">
+      <h2>The temperature in <%= cityName %> is <%= temperature %> degrees Celsius</h2>
+      <p><%= weatherDescription %></p>
+      <img src="<%= iconURL %>">
+    </div>
+  </div>
+</div>
+
 <%- include('partials/footer') %>
+
