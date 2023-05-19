@@ -1,0 +1,118 @@
+<% include('partials/header') %>
+    <div class="container">
+        <h1>Dogs Table</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Sex</th>
+                    <th scope="col">Breed</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Behaviour</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% dogs.forEach(function(dog, index) { %>
+                    <tr>
+                        <th scope="row">
+                            <%= index + 1 %>
+                        </th>
+                        <td>
+                            <%= dog.name %>
+                        </td>
+                        <td>
+                            <%= dog.sex %>
+                        </td>
+                        <td>
+                            <%= dog.breed %>
+                        </td>
+                        <td>
+                            <%= dog.age %>
+                        </td>
+                        <td>
+                            <%= dog.behaviour %>
+                        </td>
+                        <td>
+                            <%= dog.description %>
+                        </td>
+                        <td>
+                            <%= dog.reason %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+
+        <h1>Cats Table</h1>
+        <table class="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Sex</th>
+                    <th scope="col">Breed</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Behaviour</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% cats.forEach(function(cat, index) { %>
+                    <tr>
+                        <th scope="row">
+                            <%= index + 1 %>
+                        </th>
+                        <td>
+                            <%= cat.name %>
+                        </td>
+                        <td>
+                            <%= cat.sex %>
+                        </td>
+                        <td>
+                            <%= cat.breed %>
+                        </td>
+                        <td>
+                            <%= cat.age %>
+                        </td>
+                        <td>
+                            <%= cat.behaviour %>
+                        </td>
+                        <td>
+                            <%= cat.description %>
+                        </td>
+                        <td>
+                            <%= cat.reason %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+
+
+        <h1>Users Table</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(function(user, index) { %>
+                    <tr>
+                        <th scope="row">
+                            <%= index + 1 %>
+                        </th>
+                        <td>
+                            <%= user.email %>
+                        </td>
+                    </tr>
+                    <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <% include('partials/footer') %>

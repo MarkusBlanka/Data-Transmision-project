@@ -62,7 +62,7 @@ const Cat = new mongoose.model("Cat", catSchema);
 
 
 app.get("/", function (req, res) {
-    const cityName = "Satu Mare"; // Set the city name to Satu Mare
+    const cityName = "Satu Mare";
     const apiKey = config.apiKey;
     const units = "metric";
     const url =
@@ -109,17 +109,14 @@ app.post("/login", function (req, res) {
                 if (foundUser.password === password) {
                     res.render("firstpage");
                 } else {
-                    // Incorrect password
                     res.render("advertisement", { message: "Incorrect password. Please try again." });
                 }
             } else {
-                // User doesn't exist
                 res.render("advertisement", { message: "User not found. Please register an account if you haven't done it yet or try again." });
             }
         })
         .catch((err) => {
             console.log(err);
-            // Error occurred
             res.render("advertisement", { message: "An error occurred. Please try again later." });
         });
 });
@@ -215,7 +212,6 @@ app.get("/dogs", function (req, res) {
         })
         .catch(err => {
             console.log(err);
-            // Handle the error
         });
 });
 
@@ -307,7 +303,6 @@ app.get("/cats", function (req, res) {
         })
         .catch(err => {
             console.log(err);
-            // Handle the error
         });
 });
 
@@ -323,10 +318,10 @@ app.post("/cats", function (req, res) {
                 foundUser.phone = phone;
                 foundUser.save()
                     .then(() => {
-                        // Delete all registrations from the dogs collection
+                        // Delete all registrations from the cats collection
                         Cat.deleteMany({})
                             .then(() => {
-                                // Redirect to the dogs page with success message
+                                // Redirect to the cats page with success message
                                 res.redirect("/cats?success=true");
                             })
                             .catch((error) => {
@@ -372,7 +367,6 @@ app.post('/cats/:id', async (req, res) => {
         const cat = await Cat.findById(catId);
 
         if (!cat) {
-            // Daca nu se
             return res.status(404).send('Cat not found.');
         }
 
@@ -383,6 +377,19 @@ app.post('/cats/:id', async (req, res) => {
     } catch (error) {
         res.status(500).send('An error occurred while processing the adoption request.');
     }
+});
+
+
+
+app.get("/tables", function (req, res) {
+    Promise.all([Dog.find({}), Cat.find({}), User.find({})])
+        .then(([dogs, cats, users]) => {
+            const userEmails = users.map(user => user.email);
+            res.render("tables", { dogs: dogs, cats: cats, users: users, userEmails: userEmails });
+        })
+        .catch(err => {
+            console.log(err);
+        });
 });
 
 
