@@ -22,9 +22,9 @@
           <%= dog.reason %>
         </p>
       </div>
-       <form action="/dogs/<%= dog._id %>" method="POST">
-                <button class="btn btn-outline-danger" type="submit">Adopt</button>
-            </form>
+      <form action="/dogs/<%= dog._id %>" method="POST">
+        <button class="btn btn-danger" type="submit">Adopt</button>
+      </form>
       <% } else { %>
         <p>Dog not found.</p>
         <% } %>

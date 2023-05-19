@@ -9,9 +9,9 @@ const config = require("./config");
 const app = express();
 
 app.use(express.static("public"));
-app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.set('view engine', 'ejs');
 
 
 mongoose.connect("mongodb://localhost:27017/adoptionDB", { useNewUrlParser: true });
@@ -23,9 +23,12 @@ const userSchema = new mongoose.Schema({
 });
 
 const secret = "Thisisourlittlesecret";
+
 userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] });
 
 const User = new mongoose.model("User", userSchema);
+
+
 
 const dogSchema = new mongoose.Schema({
     name: String,
@@ -39,6 +42,7 @@ const dogSchema = new mongoose.Schema({
 });
 
 const Dog = new mongoose.model("Dog", dogSchema);
+
 
 
 const catSchema = new mongoose.Schema({
@@ -91,20 +95,39 @@ app.get("/", function (req, res) {
 
 
 
-
-
-
-
 app.get("/login", function (req, res) {
     res.render("login");
 });
 
-app.get("/register", function (req, res) {
-    res.render("register");
+app.post("/login", function (req, res) {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({ email: username })
+        .then((foundUser) => {
+            if (foundUser) {
+                if (foundUser.password === password) {
+                    res.render("firstpage");
+                } else {
+                    // Incorrect password
+                    res.render("advertisement", { message: "Incorrect password. Please try again." });
+                }
+            } else {
+                // User doesn't exist
+                res.render("advertisement", { message: "User not found. Please register an account if you haven't done it yet or try again." });
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            // Error occurred
+            res.render("advertisement", { message: "An error occurred. Please try again later." });
+        });
 });
 
-app.get("/firstpage", function (req, res) {
-    res.render("firstpage");
+
+
+app.get("/register", function (req, res) {
+    res.render("register");
 });
 
 app.post("/register", function (req, res) {
@@ -123,6 +146,14 @@ app.post("/register", function (req, res) {
 
 
 });
+
+
+
+app.get("/firstpage", function (req, res) {
+    res.render("firstpage");
+});
+
+
 
 app.get("/makeapost", function (req, res) {
     res.render("makeapost");
@@ -168,6 +199,9 @@ app.post("/makeapost", function (req, res) {
 
 });
 
+
+
+
 app.get("/dogs", function (req, res) {
     const breedQuery = req.query.breed; // Get the breed query parameter from the request
 
@@ -184,108 +218,6 @@ app.get("/dogs", function (req, res) {
             // Handle the error
         });
 });
-
-
-app.get("/dogs/:id", function (req, res) {
-    const dogId = req.params.id;
-
-    Dog.findById(dogId)
-        .then(dog => {
-            if (dog) {
-                res.render("dogDetail", { dog: dog });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
-});
-
-
-
-app.get("/cats", function (req, res) {
-    const breedQuery = req.query.breed; // Get the breed query parameter from the request
-
-    // Create a search query based on the breed parameter
-    const searchQuery = breedQuery ? { breed: breedQuery } : {};
-
-    Dog.find(searchQuery)
-        .then(cats => {
-            const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
-            res.render("cats", { cats: cats, successMessage: successMessage });
-        })
-        .catch(err => {
-            console.log(err);
-            // Handle the error
-        });
-});
-
-
-
-app.get("/cats/:id", function (req, res) {
-    const catId = req.params.id;
-
-    Cat.findById(catId)
-        .then(cat => {
-            if (cat) {
-                res.render("catDetail", { cat: cat });
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
-});
-
-app.post('/dogs/:id', async (req, res) => {
-    const dogId = req.params.id;
-
-    try {
-        // Search by id
-        const dog = await Dog.findById(dogId);
-
-        if (!dog) {
-            return res.status(404).send('Dog not found.');
-        }
-
-        // Delete the dog from the database
-        await Dog.findByIdAndRemove(dogId);
-
-        res.redirect("/success");
-    } catch (error) {
-        res.status(500).send('An error occurred while processing the adoption request.');
-    }
-});
-
-app.post('/cats/:id', async (req, res) => {
-    const catId = req.params.id;
-
-    try {
-        // Search by id
-        const cat = await Cat.findById(catId);
-
-        if (!cat) {
-            // Daca nu se
-            return res.status(404).send('Cat not found.');
-        }
-
-        // Delete the cat from the database
-        await Cat.findByIdAndRemove(catId);
-
-        res.redirect("/success");
-    } catch (error) {
-        res.status(500).send('An error occurred while processing the adoption request.');
-    }
-});
-
-
-
-app.get("/makeapost", function (req, res) {
-    res.render("makeapost");
-});
-
-app.get("/success", function (req, res) {
-    res.render("success");
-});
-
 
 
 app.post("/dogs", function (req, res) {
@@ -321,6 +253,61 @@ app.post("/dogs", function (req, res) {
         .catch((error) => {
             console.error(error);
             res.status(500).send("An error occurred while searching for the user.");
+        });
+});
+
+
+app.get("/dogs/:id", function (req, res) {
+    const dogId = req.params.id;
+
+    Dog.findById(dogId)
+        .then(dog => {
+            if (dog) {
+                res.render("dogDetail", { dog: dog });
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+});
+
+
+app.post('/dogs/:id', async (req, res) => {
+    const dogId = req.params.id;
+
+    try {
+        // Search by id
+        const dog = await Dog.findById(dogId);
+
+        if (!dog) {
+            return res.status(404).send('Dog not found.');
+        }
+
+        // Delete the dog from the database
+        await Dog.findByIdAndRemove(dogId);
+
+        res.redirect("/success");
+    } catch (error) {
+        res.status(500).send('An error occurred while processing the adoption request.');
+    }
+});
+
+
+
+app.get("/cats", function (req, res) {
+    const breedQuery = req.query.breed; // Get the breed query parameter from the request
+
+    // Create a search query based on the breed parameter
+    const searchQuery = breedQuery ? { breed: breedQuery } : {};
+
+    Cat.find(searchQuery)
+        .then(cats => {
+            const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
+            res.render("cats", { cats: cats, successMessage: successMessage });
+        })
+        .catch(err => {
+            console.log(err);
+            // Handle the error
         });
 });
 
@@ -362,30 +349,46 @@ app.post("/cats", function (req, res) {
 });
 
 
+app.get("/cats/:id", function (req, res) {
+    const catId = req.params.id;
 
-app.post("/login", function (req, res) {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    User.findOne({ email: username })
-        .then((foundUser) => {
-            if (foundUser) {
-                if (foundUser.password === password) {
-                    res.render("firstpage");
-                } else {
-                    // Incorrect password
-                    res.render("advertisement", { message: "Incorrect password. Please try again." });
-                }
-            } else {
-                // User doesn't exist
-                res.render("advertisement", { message: "User not found. Please register an account if you haven't done it yet or try again." });
+    Cat.findById(catId)
+        .then(cat => {
+            if (cat) {
+                res.render("catDetail", { cat: cat });
             }
         })
-        .catch((err) => {
+        .catch(err => {
             console.log(err);
-            // Error occurred
-            res.render("advertisement", { message: "An error occurred. Please try again later." });
         });
+});
+
+
+app.post('/cats/:id', async (req, res) => {
+    const catId = req.params.id;
+
+    try {
+        // Search by id
+        const cat = await Cat.findById(catId);
+
+        if (!cat) {
+            // Daca nu se
+            return res.status(404).send('Cat not found.');
+        }
+
+        // Delete the cat from the database
+        await Cat.findByIdAndRemove(catId);
+
+        res.redirect("/success");
+    } catch (error) {
+        res.status(500).send('An error occurred while processing the adoption request.');
+    }
+});
+
+
+
+app.get("/success", function (req, res) {
+    res.render("success");
 });
 
 
