@@ -1,76 +1,120 @@
 <%- include('partials/header') %>
 
-  <div class="container mt-5" id="catss">
-    <div id="title">
-      <h1>Choose your future best friend</h1>
-      <h2>Available Cats</h2>
+  <% if (successMessage) { %>
+    <div class="success-message">
+      <%= successMessage %>
     </div>
-    <div class="cat-gallery">
-      <% cats.forEach(function(cat) { %>
+    <% } else { %>
+      <div id="title">
+        <h1>Choose your future best friend</h1>
+        <h2>Available Cats</h2>
+      </div>
+      <div class="cat-gallery">
+        <% cats.forEach(function(cat) { %>
 
-        <div class="cat-card">
-          <h3>
-            <%= cat.name %>
-          </h3>
-          <p><strong>Breed:</strong>
-            <%= cat.breed %>
-          </p>
-          <a class="btn btn-secondary" role="button" href="/cats/<%= cat._id %>">See details</a>
-        </div>
+          <div class="cat-card">
+            <h3>
+              <%= cat.name %>
+            </h3>
+            <p><strong>Breed:</strong>
+              <%= cat.breed %>
+            </p>
+            <a class="btn btn-secondary" role="button" href="/cats/<%= cat._id %>">See details</a>
+          </div>
 
-        <% }); %>
-    </div>
-  </div>
+          <% }); %>
+      </div>
 
-  <%- include('partials/footer') %>
+      <div class="foster-section">
+        <p>If you would like to be a foster for the cats until they find their forever home, click the button below:</p>
+        <form action="/cats" method="POST">
+          <input type="email" name="email" placeholder="Your email" required>
+          <input type="tel" name="phone" placeholder="Your phone number" required>
+          <button type="submit" class="btn btn-danger">Foster</button>
+        </form>
+      </div>
 
-    <style>
-      
-      h1 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+      </div>
+      <% } %>
+<%- include('partials/footer') %>
 
-      h2 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
+          
+          
+          <style>
+            h1 {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
 
-      .cat-gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        grid-gap: 20px;
-      }
+            h2 {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
 
-      .cat-card {
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        padding: 15px;
-        text-align: center;
-      }
+            .cat-gallery {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+              grid-gap: 20px;
+            }
+
+            .cat-card {
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              padding: 15px;
+              text-align: center;
+            }
 
 
-      .cat-card h3 {
-        margin-top: 10px;
-        text-align: center;
-      }
+            .cat-card h3 {
+              margin-top: 10px;
+              text-align: center;
+            }
 
-      .cat-card p {
-        margin-bottom: 10px;
-      }
+            .cat-card p {
+              margin-bottom: 10px;
+            }
 
-      .cat-card button {
-        background-color: #555b62;
-        color: #fff;
-        border: none;
-        padding: 8px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+            .cat-card button {
+              background-color: #555b62;
+              color: #fff;
+              border: none;
+              padding: 8px 15px;
+              border-radius: 5px;
+              cursor: pointer;
+            }
 
-      .cat-card button:hover {
-        background-color: #737b83;
-      }
-    </style>
+            .cat-card button:hover {
+              background-color: #737b83;
+            }
+
+
+            .foster-section {
+              margin-top: 30px;
+              text-align: center;
+            }
+
+            .foster-section p {
+              margin-bottom: 10px;
+            }
+
+            .foster-section input {
+              margin-right: 5px;
+              margin-bottom: 10px;
+              padding: 5px;
+            }
+
+            .foster-section button {
+              background-color: #dc3545;
+              color: #fff;
+              border: none;
+              padding: 8px 15px;
+              border-radius: 5px;
+              cursor: pointer;
+            }
+
+            .foster-section button:hover {
+              background-color: #c82333;
+            }
+          </style>

@@ -14,16 +14,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-
-
-
-
-
 mongoose.connect("mongodb://localhost:27017/adoptionDB", { useNewUrlParser: true });
 
 const userSchema = new mongoose.Schema({
     email: String,
-    password: String
+    password: String,
+    phone: String
 });
 
 const secret = "Thisisourlittlesecret";
@@ -66,32 +62,32 @@ app.get("/", function (req, res) {
     const apiKey = config.apiKey;
     const units = "metric";
     const url =
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-      cityName +
-      "&units=" +
-      units +
-      "&appid=" +
-      apiKey;
-  
+        "https://api.openweathermap.org/data/2.5/weather?q=" +
+        cityName +
+        "&units=" +
+        units +
+        "&appid=" +
+        apiKey;
+
     https.get(url, function (response) {
-      response.on("data", function (data) {
-        const weatherData = JSON.parse(data);
-        const temp = weatherData.main.temp;
-        const weatherDescription = weatherData.weather[0].description;
-        const icon = weatherData.weather[0].icon;
-        const imgURL =
-          "https://openweathermap.org/img/wn/" + icon + "@2x.png";
-        const name = weatherData.name;
-  
-        res.render("home", {
-          cityName: name,
-          temperature: temp,
-          weatherDescription: weatherDescription,
-          iconURL: imgURL,
+        response.on("data", function (data) {
+            const weatherData = JSON.parse(data);
+            const temp = weatherData.main.temp;
+            const weatherDescription = weatherData.weather[0].description;
+            const icon = weatherData.weather[0].icon;
+            const imgURL =
+                "https://openweathermap.org/img/wn/" + icon + "@2x.png";
+            const name = weatherData.name;
+
+            res.render("home", {
+                cityName: name,
+                temperature: temp,
+                weatherDescription: weatherDescription,
+                iconURL: imgURL,
+            });
         });
-      });
     });
-  });
+});
 
 
 
@@ -119,7 +115,7 @@ app.post("/register", function (req, res) {
     });
     newUser.save()
         .then(() => {
-            res.render("firstpage");
+            res.redirect("firstpage");
         })
         .catch(err => {
             console.log(err);
@@ -146,7 +142,7 @@ app.post("/makeapost", function (req, res) {
         });
         newDog.save()
             .then(() => {
-                res.redirect("/dogs"); 
+                res.redirect("/dogs");
             })
             .catch(err => {
                 console.log(err);
@@ -163,7 +159,7 @@ app.post("/makeapost", function (req, res) {
         });
         newCat.save()
             .then(() => {
-                res.redirect("/cats"); 
+                res.redirect("/cats");
             })
             .catch(err => {
                 console.log(err);
@@ -175,7 +171,8 @@ app.post("/makeapost", function (req, res) {
 app.get("/dogs", function (req, res) {
     Dog.find()
         .then(dogs => {
-            res.render("dogs", { dogs: dogs });
+            const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
+            res.render("dogs", { dogs: dogs, successMessage: successMessage });
         })
         .catch(err => {
             console.log(err);
@@ -197,15 +194,19 @@ app.get("/dogs/:id", function (req, res) {
 });
 
 
+
 app.get("/cats", function (req, res) {
     Cat.find()
         .then(cats => {
-            res.render("cats", { cats: cats });
+            const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
+            res.render("cats", { cats: cats, successMessage: successMessage });
         })
         .catch(err => {
             console.log(err);
         })
 });
+
+
 
 app.get("/cats/:id", function (req, res) {
     const catId = req.params.id;
@@ -223,45 +224,45 @@ app.get("/cats/:id", function (req, res) {
 
 app.post('/dogs/:id', async (req, res) => {
     const dogId = req.params.id;
-  
-    try {
-      // Search by id
-      const dog = await Dog.findById(dogId);
-  
-      if (!dog) {
-        return res.status(404).send('Dog not found.');
-      }
-  
-      // Delete the dog from the database
-      await Dog.findByIdAndRemove(dogId);
 
-      res.redirect("/success");
+    try {
+        // Search by id
+        const dog = await Dog.findById(dogId);
+
+        if (!dog) {
+            return res.status(404).send('Dog not found.');
+        }
+
+        // Delete the dog from the database
+        await Dog.findByIdAndRemove(dogId);
+
+        res.redirect("/success");
     } catch (error) {
-      res.status(500).send('An error occurred while processing the adoption request.');
+        res.status(500).send('An error occurred while processing the adoption request.');
     }
-  });
+});
 
 app.post('/cats/:id', async (req, res) => {
     const catId = req.params.id;
-  
-    try {
-      // Search by id
-      const cat = await Cat.findById(catId);
-  
-      if (!cat) {
-        // Daca nu se
-        return res.status(404).send('Cat not found.');
-      }
-  
-      // Delete the cat from the database
-      await Cat.findByIdAndRemove(catId);
 
-      res.redirect("/success");
+    try {
+        // Search by id
+        const cat = await Cat.findById(catId);
+
+        if (!cat) {
+            // Daca nu se
+            return res.status(404).send('Cat not found.');
+        }
+
+        // Delete the cat from the database
+        await Cat.findByIdAndRemove(catId);
+
+        res.redirect("/success");
     } catch (error) {
-      res.status(500).send('An error occurred while processing the adoption request.');
+        res.status(500).send('An error occurred while processing the adoption request.');
     }
-  });
-  
+});
+
 
 
 app.get("/makeapost", function (req, res) {
@@ -271,6 +272,83 @@ app.get("/makeapost", function (req, res) {
 app.get("/success", function (req, res) {
     res.render("success");
 });
+
+
+
+app.post("/dogs", function (req, res) {
+    const email = req.body.email;
+    const phone = req.body.phone;
+
+    User.findOne({ email })
+        .then((foundUser) => {
+            if (foundUser) {
+                // Save the phone number of the user
+                foundUser.phone = phone;
+                foundUser.save()
+                    .then(() => {
+                        // Delete all registrations from the dogs collection
+                        Dog.deleteMany({})
+                            .then(() => {
+                                // Redirect to the dogs page with success message
+                                res.redirect("/dogs?success=true");
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                res.status(500).send("An error occurred while deleting the registrations from the dogs collection.");
+                            });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send("An error occurred while saving the phone number.");
+                    });
+            } else {
+                res.status(404).send("User not found.");
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("An error occurred while searching for the user.");
+        });
+});
+
+
+app.post("/cats", function (req, res) {
+    const email = req.body.email;
+    const phone = req.body.phone;
+
+    User.findOne({ email })
+        .then((foundUser) => {
+            if (foundUser) {
+                // Save the phone number of the user
+                foundUser.phone = phone;
+                foundUser.save()
+                    .then(() => {
+                        // Delete all registrations from the dogs collection
+                        Cat.deleteMany({})
+                            .then(() => {
+                                // Redirect to the dogs page with success message
+                                res.redirect("/cats?success=true");
+                            })
+                            .catch((error) => {
+                                console.error(error);
+                                res.status(500).send("An error occurred while deleting the registrations from the cats collection.");
+                            });
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                        res.status(500).send("An error occurred while saving the phone number.");
+                    });
+            } else {
+                res.status(404).send("User not found.");
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send("An error occurred while searching for the user.");
+        });
+});
+
+
 
 app.post("/login", function (req, res) {
     const username = req.body.username;
@@ -287,7 +365,7 @@ app.post("/login", function (req, res) {
                 }
             } else {
                 // User doesn't exist
-                res.render("advertisement", { message: "User not found. Please register an account." });
+                res.render("advertisement", { message: "User not found. Please register an account if you haven't done it yet or try again." });
             }
         })
         .catch((err) => {

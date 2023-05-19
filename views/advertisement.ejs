@@ -6,8 +6,9 @@
     <p><%= message %></p>
     <% if (message === "Incorrect password. Please try again.") { %>
     <a class="btn btn-secondary" role="button" href="/login">Back</a>
-    <% } else if(message === "User not found. Please register an account.") { %>
-      <a class="btn btn-secondary" role="button" href="/register">Back</a>
+    <% } else if(message === "User not found. Please register an account if you haven't done it yet or try again.") { %>
+      <a class="btn btn-secondary" role="button" href="/register">Register</a>
+      <a class="btn btn-secondary" role="button" href="/login">Back</a>
     <% } %>
   </div>
 </div>

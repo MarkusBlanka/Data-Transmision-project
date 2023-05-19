@@ -1,32 +1,45 @@
 <%- include('partials/header') %>
 
-  <div class="container mt-5" id="dogs">
+  <% if (successMessage) { %>
+    <div class="success-message">
+      <%= successMessage %>
+    </div>
+  <% } else { %>
     <div id="title">
       <h1>Choose your future best friend</h1>
       <h2>Available Dogs</h2>
     </div>
-    <div class="dog-gallery">
-      <% dogs.forEach(function(dog) { %>
+  <div class="dog-gallery">
+    <% dogs.forEach(function(dog) { %>
 
-        <div class="dog-card">
-          <h3>
-            <%= dog.name %>
-          </h3>
-          <p><strong>Breed:</strong>
-            <%= dog.breed %>
-          </p>
-          <a class="btn btn-secondary" role="button" href="/dogs/<%= dog._id %>">See details</a>
-        </div>
-
-        <% }); %>
+    <div class="dog-card">
+      <h3>
+        <%= dog.name %>
+      </h3>
+      <p><strong>Breed:</strong>
+        <%= dog.breed %>
+      </p>
+      <a class="btn btn-secondary" role="button" href="/dogs/<%= dog._id %>">See details</a>
     </div>
+
+    <% }); %>
   </div>
 
-  <%- include('partials/footer') %>
+  <div class="foster-section">
+    <p>If you would like to be a foster for the dogs until they find their forever home, click the button below:</p>
+    <form action="/dogs" method="POST">
+      <input type="email" name="email" placeholder="Your email" required>
+      <input type="tel" name="phone" placeholder="Your phone number" required>
+      <button type="submit" class="btn btn-danger">Foster</button>
+    </form>
+  </div>
 
-    <style>
-      
-      h1 {
+</div>
+<% } %> 
+<%- include('partials/footer') %>
+
+<style>
+    h1 {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -73,4 +86,34 @@
       .dog-card button:hover {
         background-color: #737b83;
       }
-    </style>
+
+
+  .foster-section {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .foster-section p {
+    margin-bottom: 10px;
+  }
+
+  .foster-section input {
+    margin-right: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+  }
+
+  .foster-section button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .foster-section button:hover {
+    background-color: #c82333;
+  }
+
+</style>
