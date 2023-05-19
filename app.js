@@ -169,15 +169,22 @@ app.post("/makeapost", function (req, res) {
 });
 
 app.get("/dogs", function (req, res) {
-    Dog.find()
+    const breedQuery = req.query.breed; // Get the breed query parameter from the request
+
+    // Create a search query based on the breed parameter
+    const searchQuery = breedQuery ? { breed: breedQuery } : {};
+
+    Dog.find(searchQuery)
         .then(dogs => {
             const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
             res.render("dogs", { dogs: dogs, successMessage: successMessage });
         })
         .catch(err => {
             console.log(err);
-        })
+            // Handle the error
+        });
 });
+
 
 app.get("/dogs/:id", function (req, res) {
     const dogId = req.params.id;
@@ -196,14 +203,20 @@ app.get("/dogs/:id", function (req, res) {
 
 
 app.get("/cats", function (req, res) {
-    Cat.find()
+    const breedQuery = req.query.breed; // Get the breed query parameter from the request
+
+    // Create a search query based on the breed parameter
+    const searchQuery = breedQuery ? { breed: breedQuery } : {};
+
+    Dog.find(searchQuery)
         .then(cats => {
             const successMessage = req.query.success === 'true' ? "Our team has received your request and will get in touch with you soon." : "";
             res.render("cats", { cats: cats, successMessage: successMessage });
         })
         .catch(err => {
             console.log(err);
-        })
+            // Handle the error
+        });
 });
 
 

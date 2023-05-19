@@ -9,6 +9,10 @@
         <h1>Choose your future best friend</h1>
         <h2>Available Cats</h2>
       </div>
+      <form style="padding-left: 25px;" action="/cats" method="GET" class="search-form">
+        <input type="text" name="breed" placeholder="Search by breed">
+        <button type="submit" class="btn btn-dark">Search</button>
+      </form>
       <div class="cat-gallery">
         <% cats.forEach(function(cat) { %>
 
@@ -19,7 +23,7 @@
             <p><strong>Breed:</strong>
               <%= cat.breed %>
             </p>
-            <a class="btn btn-secondary" role="button" href="/cats/<%= cat._id %>">See details</a>
+            <a class="btn btn-info" role="button" href="/cats/<%= cat._id %>">See details</a>
           </div>
 
           <% }); %>
